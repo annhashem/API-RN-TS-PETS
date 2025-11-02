@@ -15,10 +15,12 @@ import { Pet } from "../data/pets";
 export default function PetDetails() {
   const { id } = useLocalSearchParams();
   const [pet, setPet] = useState<Pet | null>(null);
+  console.log(pet);
+
   const handleGetPetById = async () => {
-    const petResponse = await getPetById(id as string);
-    console.log(petResponse.data);
-    setPet(petResponse.data);
+    const petdata = await getPetById(id as string);
+    console.log(petdata);
+    setPet(petdata);
   };
 
   if (!pet) {
@@ -26,7 +28,7 @@ export default function PetDetails() {
       <SafeAreaView style={styles.container} edges={["bottom"]}>
         <View style={styles.errorContainer}>
           <TouchableOpacity onPress={handleGetPetById}>
-            <Text>getPet</Text>
+            <Text>Get Pet</Text>
           </TouchableOpacity>
           <Text style={styles.errorText}>Pet not found!</Text>
         </View>

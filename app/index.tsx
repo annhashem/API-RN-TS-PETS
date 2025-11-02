@@ -28,10 +28,8 @@ export default function Index() {
 
   const handleGetAllPets = async () => {
     const pets = await getAllPets();
-    console.log("pets", pets);
     setPets(pets);
   };
-
   return (
     <>
       <TouchableOpacity
