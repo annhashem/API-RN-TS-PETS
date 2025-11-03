@@ -7,4 +7,13 @@ const getPetById = async (id: string) => {
   const response = await instance.get(`/pets/${id}`);
   return response.data;
 };
-export { getAllPets, getPetById };
+const createPet = async (
+  name: string,
+  image: string,
+  type: string,
+  adopted: string
+) => {
+  const response = await instance.post("/pets", { name, image, type, adopted });
+  return response.data;
+};
+export { createPet, getAllPets, getPetById };
