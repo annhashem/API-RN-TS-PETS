@@ -16,4 +16,8 @@ const createPet = async (
   const response = await instance.post("/pets", { name, image, type, adopted });
   return response.data;
 };
-export { createPet, getAllPets, getPetById };
+const deletePet = async (id: string) => {
+  const response = await instance.delete(`/pets/${id}`);
+  return response.data;
+};
+export { createPet, deletePet, getAllPets, getPetById };

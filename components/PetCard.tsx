@@ -5,9 +5,15 @@ import { Pet } from "../data/pets";
 interface PetCardProps {
   pet: Pet;
   onPress: () => void;
+  onDelete?: () => void;
 }
 
-export const PetCard: React.FC<PetCardProps> = ({ pet, onPress }) => {
+export const PetCard: React.FC<PetCardProps> = ({ pet, onPress, onDelete }) => {
+  const handleDelete = (e: any) => {
+    e.stopPropagation();
+    onDelete?.();
+  };
+
   return (
     <TouchableOpacity style={styles.card} onPress={onPress}>
       <Image source={{ uri: pet.image }} style={styles.image} />
@@ -17,11 +23,21 @@ export const PetCard: React.FC<PetCardProps> = ({ pet, onPress }) => {
             <Text style={styles.idBadge}>#{pet.id}</Text>
             <Text style={styles.name}>{pet.name}</Text>
           </View>
-          {pet.adopted === "Yes" && (
-            <View style={styles.badge}>
-              <Text style={styles.badgeText}>✓</Text>
-            </View>
-          )}
+          <View style={styles.rightContainer}>
+            {pet.adopted === "Yes" && (
+              <View style={styles.badge}>
+                <Text style={styles.badgeText}>✓</Text>
+              </View>
+            )}
+            {onDelete && (
+              <TouchableOpacity
+                onPress={handleDelete}
+                style={styles.deleteButton}
+              >
+                <Text style={styles.deleteText}>🗑️</Text>
+              </TouchableOpacity>
+            )}
+          </View>
         </View>
         <Text style={styles.type}>{pet.type}</Text>
       </View>
@@ -57,6 +73,11 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: 4,
+  },
+  rightContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
   },
   titleContainer: {
     flexDirection: "row",
@@ -96,5 +117,11 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 14,
     fontWeight: "600",
+  },
+  deleteButton: {
+    padding: 4,
+  },
+  deleteText: {
+    fontSize: 18,
   },
 });

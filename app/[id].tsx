@@ -1,5 +1,5 @@
-import { getPetById } from "@/api/pets";
-import { useLocalSearchParams } from "expo-router";
+import { deletePet, getPetById } from "@/api/pets";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
   Image,
@@ -14,6 +14,7 @@ import { Pet } from "../data/pets";
 
 export default function PetDetails() {
   const { id } = useLocalSearchParams();
+  const router = useRouter();
   const [pet, setPet] = useState<Pet | null>(null);
   console.log(pet);
 
@@ -21,6 +22,15 @@ export default function PetDetails() {
     const petdata = await getPetById(id as string);
     console.log(petdata);
     setPet(petdata);
+  };
+
+  const handleDeletePet = async () => {
+    try {
+      await deletePet(id as string);
+      router.back();
+    } catch (error) {
+      console.error("Error deleting pet:", error);
+    }
   };
 
   if (!pet) {
@@ -31,6 +41,14 @@ export default function PetDetails() {
             <Text>Get Pet</Text>
           </TouchableOpacity>
           <Text style={styles.errorText}>Pet not found!</Text>
+          <View style={styles.deleteSection}>
+            <TouchableOpacity
+              style={styles.deleteButton}
+              onPress={handleDeletePet}
+            >
+              <Text style={styles.deleteButtonText}>Delete Pet</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </SafeAreaView>
     );
@@ -159,9 +177,31 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    paddingHorizontal: 20,
   },
   errorText: {
     fontSize: 18,
     color: "#666",
+    marginBottom: 20,
+  },
+  deleteSection: {
+    width: "100%",
+    marginTop: 8,
+  },
+  deleteButton: {
+    backgroundColor: "#FF3B30",
+    borderRadius: 12,
+    padding: 16,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  deleteButtonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "600",
   },
 });

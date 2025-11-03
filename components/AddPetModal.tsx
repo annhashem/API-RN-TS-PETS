@@ -32,16 +32,16 @@ export const AddPetModal: React.FC<AddPetModalProps> = ({
     if (name.trim() && type.trim()) {
       const maxId = Date.now(); // Generate unique ID using rtimestamp
 
-      const newPet = await createPet(name, image, type, adopted);
-      onAdd({
-        id: maxId,
-        name: name.trim(),
-        type: type.trim(),
-        adopted: adopted.trim() || "No",
-        image:
-          image.trim() ||
+      const newPet = await createPet(
+        name.trim(),
+        image.trim() ||
           "https://images.unsplash.com/photo-1450778869180-41d0601e046e?w=400&h=400&fit=crop",
-      });
+        type.trim(),
+        adopted.trim() || "No"
+      );
+
+      onAdd(newPet);
+
       // Reset form
       setName("");
       setType("");
